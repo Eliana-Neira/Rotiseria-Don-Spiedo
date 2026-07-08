@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Pedido - Don Spiedo</title>
+    <meta name="description" content="Completá tu pedido en Don Spiedo">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/checkout.css">
+</head>
+<body>
+    <div class="checkoutContainer">
+        <div class="checkoutHeader">
+            <h1>Finalizar Pedido</h1>
+            <p>Completá tus datos para confirmar el pedido</p>
+        </div>
+        
+        <div class="resumenPedido" id="resumenPedido">
+            <h3>Resumen del pedido</h3>
+            <div id="itemsResumen"></div>
+            <div class="itemResumen totalResumen">
+                <span>Total:</span>
+                <span id="totalResumen">$0</span>
+            </div>
+        </div>
+        
+        <form class="formularioCheckout" id="formularioCheckout">
+            <div class="filaDoble">
+                <div class="campoFormulario">
+                    <label for="nombre">Nombre *</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div class="campoFormulario">
+                    <label for="apellido">Apellido *</label>
+                    <input type="text" id="apellido" name="apellido" required>
+                </div>
+            </div>
+            
+            <div class="campoFormulario">
+                <label for="telefono">Teléfono *</label>
+                <input type="tel" id="telefono" name="telefono" required>
+            </div>
+            
+            <div class="filaDoble">
+                <div class="campoFormulario">
+                    <label for="calle">Calle *</label>
+                    <input type="text" id="calle" name="calle" required>
+                </div>
+                <div class="campoFormulario">
+                    <label for="numero">Número *</label>
+                    <input type="text" id="numero" name="numero" required>
+                </div>
+            </div>
+            <div class="campoFormulario">
+                    <label for="descripcion">Descripción (opcional)</label>
+                    <input type="text" id="descripcion" name="descripcion">
+                </div>
+            <div class="seccionPago">
+                <label>Método de pago *</label>
+                <div class="campoPago">
+                    <label>
+                        <input type="radio" name="metodoPago" value="transferencia" required>
+                        Transferencia
+                    </label>
+                    <label>
+                        <input type="radio" name="metodoPago" value="efectivo" required>
+                        Efectivo
+                    </label>
+                </div>
+            </div>
+            
+            <div class="campoFormulario" id="campoPagaCon" style="display: none;">
+                <label for="pagaCon">¿Con cuánto paga? *</label>
+                <input type="number" id="pagaCon" name="pagaCon" min="0">
+            </div>
+            
+            <button type="submit" class="botonEnviar">Enviar pedido por WhatsApp</button>
+            <button type="button" class="botonVolver" id="botonVolver">Volver al menú</button>
+        </form>
+    </div>
+    
+    <script src="../assets/js/carrito.js"></script>
+    <script src="../assets/js/menu.js"></script>
+    <script src="../assets/js/checkout.js"></script>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
