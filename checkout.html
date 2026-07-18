@@ -44,20 +44,56 @@
                 <input type="tel" id="telefono" name="telefono" required>
             </div>
             
-            <div class="filaDoble">
-                <div class="campoFormulario">
-                    <label for="calle">Calle *</label>
-                    <input type="text" id="calle" name="calle" required>
-                </div>
-                <div class="campoFormulario">
-                    <label for="numero">Número *</label>
-                    <input type="text" id="numero" name="numero" required>
+            <!-- Opción de retiro/delivery -->
+            <div class="seccionRetiro">
+                <label>Tipo de pedido *</label>
+                <div class="opcionesRetiro">
+                    <label class="opcionRetiro">
+                        <input type="radio" name="tipoPedido" value="delivery" checked>
+                        <span class="textoRetiro">Delivery</span>
+                    </label>
+                    <label class="opcionRetiro">
+                        <input type="radio" name="tipoPedido" value="retiro">
+                        <span class="textoRetiro">Retirar en el local</span>
+                    </label>
                 </div>
             </div>
-            <div class="campoFormulario">
+            
+            <!-- Información de entrega/dirección -->
+            <div id="seccionDireccion">
+                <div class="filaDoble">
+                    <div class="campoFormulario">
+                        <label for="calle">Calle *</label>
+                        <input type="text" id="calle" name="calle" required>
+                    </div>
+                    <div class="campoFormulario">
+                        <label for="numero">Número *</label>
+                        <input type="text" id="numero" name="numero" required>
+                    </div>
+                </div>
+                <div class="campoFormulario">
                     <label for="descripcion">Descripción (opcional)</label>
                     <input type="text" id="descripcion" name="descripcion">
                 </div>
+            </div>
+            
+            <!-- Información del local (oculta por defecto) -->
+            <div id="infoLocal" class="infoLocal" style="display: none;">
+                <h4>Dirección del local</h4>
+                <p class="direccionLocal">Av. España 1234, Funes, Santa Fe</p>
+                <div class="mapaLocal">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3347.9!2d-60.2500!3d-32.9500!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95b6025777777777%3A0x7777777777777777!2sDon%20Spiedo!5e0!3m2!1ses!2sar!4v1700000000000" 
+                        width="100%" 
+                        height="150" 
+                        style="border:0; border-radius: 10px;" 
+                        allowfullscreen="" 
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+            
             <div class="seccionPago">
                 <label>Método de pago *</label>
                 <div class="campoPago">
@@ -66,15 +102,27 @@
                         Transferencia
                     </label>
                     <label>
-                        <input type="radio" name="metodoPago" value="efectivo" required>
+                        <input type="radio" name="metodoPago" value="efectivo">
                         Efectivo
                     </label>
                 </div>
             </div>
             
+            <!-- Información de transferencia (oculta por defecto) -->
+            <div id="infoTransferencia" class="infoTransferencia" style="display: none;">
+                <h4>Datos para transferencia</h4>
+                <div class="datosTransferencia">
+                    <p><strong>Alias:</strong> <span class="aliasTransferencia">donspiedo.mp</span></p>
+                    <p><strong>CVU:</strong> <span class="cvuTransferencia">0000000000000000000000</span></p>
+                </div>
+            </div>
+            
             <div class="campoFormulario" id="campoPagaCon" style="display: none;">
                 <label for="pagaCon">¿Con cuánto paga? *</label>
-                <input type="number" id="pagaCon" name="pagaCon" min="0">
+                <div class="inputConMoneda">
+                    <span class="simboloMoneda">$</span>
+                    <input type="text" id="pagaCon" name="pagaCon" placeholder="0" inputmode="numeric" pattern="[0-9,]*">
+                </div>
             </div>
             
             <button type="submit" class="botonEnviar">Enviar pedido por WhatsApp</button>

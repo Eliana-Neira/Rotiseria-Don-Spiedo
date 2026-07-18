@@ -1,7 +1,6 @@
 // carrito.js - Funciones del carrito
 
 let carrito = [];
-let deliveryGratisActivo = false;
 
 function formatearMoneda(valor) {
     return new Intl.NumberFormat('es-AR', {
@@ -58,7 +57,7 @@ function renderizarCarrito() {
             `;
             contenedorItemsCarrito.appendChild(filaPromo);
             
-// Mostrar cada pizza con precio tachado
+            // Mostrar cada pizza con precio tachado
             item.pizzas.forEach((pizza, index) => {
                 const filaPizza = document.createElement('div');
                 filaPizza.className = 'itemCarrito detallePizza';
@@ -74,8 +73,23 @@ function renderizarCarrito() {
         } else {
             const fila = document.createElement('div');
             fila.className = 'itemCarrito';
+            
+            // Mostrar ingredientes personalizados si existen
+            let ingredientesHtml = '';
+            if (item.ingredientes) {
+                if (item.ingredientes.agregar && item.ingredientes.agregar.length > 0) {
+                    ingredientesHtml += `<div class="ingredientesItemCarrito">+ ${item.ingredientes.agregar.join(', ')}</div>`;
+                }
+                if (item.ingredientes.sacar && item.ingredientes.sacar.length > 0) {
+                    ingredientesHtml += `<div class="ingredientesItemCarrito">Sin ${item.ingredientes.sacar.join(', ')}</div>`;
+                }
+            }
+            
             fila.innerHTML = `
-                <span>${item.name} x${item.quantity}</span>
+                <div>
+                    <span>${item.name} x${item.quantity}</span>
+                    ${ingredientesHtml}
+                </div>
                 <div class="accionesItemCarrito">
                     <strong>${formatearMoneda(item.price * item.quantity)}</strong>
                     <button class="botonEliminar" data-name="${item.name}">Eliminar</button>
@@ -85,26 +99,8 @@ function renderizarCarrito() {
         }
     });
 
-    // Mostrar opción de delivery gratis si el total supera $8000
-    if (total >= 8000) {
-        const filaDelivery = document.createElement('div');
-        filaDelivery.className = 'itemCarrito deliveryOption';
-        const textoDelivery = deliveryGratisActivo ? '✅ Delivery gratis activado' : '🚚 Delivery gratis disponible';
-        const textoBoton = deliveryGratisActivo ? 'Quitar' : 'Agregar';
-        const claseActivo = deliveryGratisActivo ? 'activo' : '';
-        filaDelivery.innerHTML = `
-            <span>${textoDelivery}</span>
-            <button class="botonDelivery ${claseActivo}" id="delivery-gratis-btn">${textoBoton}</button>
-        `;
-        contenedorItemsCarrito.appendChild(filaDelivery);
-    }
-
-    // Mostrar el total con indicación de delivery gratis si está activo
-    if (deliveryGratisActivo) {
-        elementoTotalCarrito.innerHTML = `Total: ${formatearMoneda(total)} <span class="etiquetaDelivery">(Delivery gratis)</span>`;
-    } else {
-        elementoTotalCarrito.textContent = `Total: ${formatearMoneda(total)}`;
-    }
+    // Mostrar el total
+    elementoTotalCarrito.textContent = `Total: ${formatearMoneda(total)}`;
 
     const filaConfirmar = document.createElement('div');
     filaConfirmar.className = 'itemCarrito';
@@ -122,25 +118,83 @@ function alternarCarrito(mostrar) {
     }
 }
 
-function agregarAlCarrito(nombre, precio) {
+function agregarAlCarrito(nombre, precio, ingredientes = { agregar: [], sacar: [] }) {
+    // Calcular precio adicional por ingredientes
+    const precioIngredientes = (ingredientes.agregar || []).reduce((sum, ingId) => {
+        const ing = Object.values(menuModule.ingredientesPersonalizables || {})
+            .flatMap(cat => cat.agregar || [])
+            .find(i => i.id === ingId);
+        return sum + (ing ? ing.price : 0);
+    }, 0);
+    
+    // Obtener nombres de ingredientes
+    const nombresAgregar = (ingredientes.agregar || []).map(ingId => {
+        const ing = Object.values(menuModule.ingredientesPersonalizables || {})
+            .flatMap(cat => cat.agregar || [])
+            .find(i => i.id === ingId);
+        return ing ? ing.name : ingId;
+    });
+    
+    const nombresSacar = (ingredientes.sacar || []).map(ingId => {
+        const ing = Object.values(menuModule.ingredientesPersonalizables || {})
+            .flatMap(cat => cat.sacar || [])
+            .find(i => i.id === ingId);
+        return ing ? ing.name : ingId;
+    });
+    
     const elementoExistente = carrito.find(item => item.name === nombre);
     if (elementoExistente) {
         elementoExistente.quantity += 1;
     } else {
-        carrito.push({ name: nombre, price: precio, quantity: 1 });
+        const item = { 
+            name: nombre, 
+            price: precio + precioIngredientes, 
+            quantity: 1,
+            ingredientes: {
+                agregar: nombresAgregar,
+                sacar: nombresSacar
+            },
+            precioIngredientes: precioIngredientes
+        };
+        carrito.push(item);
     }
+
+    // Guardar en localStorage
+    localStorage.setItem('carritoPedido', JSON.stringify(carrito));
 
     renderizarCarrito();
     alternarCarrito(true);
 }
 
+// Cargar carrito desde localStorage
+function cargarCarritoDesdeStorage() {
+    const carritoGuardado = localStorage.getItem('carritoPedido');
+    if (carritoGuardado) {
+        // Vaciar el carrito actual y cargar los items guardados
+        carrito.length = 0;
+        const items = JSON.parse(carritoGuardado);
+        items.forEach(item => carrito.push(item));
+    }
+}
+
+// Eliminar item del carrito
+function eliminarDelCarrito(nombre) {
+    const indice = carrito.findIndex(item => item.name === nombre);
+    if (indice !== -1) {
+        carrito.splice(indice, 1);
+        localStorage.setItem('carritoPedido', JSON.stringify(carrito));
+        renderizarCarrito();
+    }
+}
+
 // Exportar para uso en otros módulos
 window.carritoModule = {
     carrito,
-    deliveryGratisActivo,
     formatearMoneda,
     calcularTotal,
     renderizarCarrito,
     alternarCarrito,
-    agregarAlCarrito
+    agregarAlCarrito,
+    cargarCarritoDesdeStorage,
+    eliminarDelCarrito
 };

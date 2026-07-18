@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const botonCerrarCarrito = document.getElementById('botonCerrarCarrito');
         const botonIconoCarrito = document.querySelector('.botonCarrito');
         
+    // Cargar carrito desde localStorage usando la función del módulo
+    carritoModule.cargarCarritoDesdeStorage();
+        
         // Eventos del carrito
         if (botonIconoCarrito) {
             botonIconoCarrito.addEventListener('click', () => carritoModule.alternarCarrito(true));
@@ -73,6 +76,50 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
+        // Eventos de los checkboxes de ingredientes
+        menuModule.opcionesDetalle?.addEventListener('change', (event) => {
+            const checkbox = event.target.closest('.checkboxIngrediente');
+            if (checkbox) {
+                const itemName = checkbox.dataset.item;
+                const ingId = checkbox.dataset.ing;
+                const ingType = checkbox.dataset.type;
+                const key = `${menuModule.menuActual}-${itemName}`;
+                
+                if (!menuModule.ingredientesSeleccionados[key]) {
+                    menuModule.ingredientesSeleccionados[key] = { agregar: [], sacar: [] };
+                }
+                
+                if (checkbox.checked) {
+                    if (!menuModule.ingredientesSeleccionados[key][ingType].includes(ingId)) {
+                        menuModule.ingredientesSeleccionados[key][ingType].push(ingId);
+                    }
+                } else {
+                    menuModule.ingredientesSeleccionados[key][ingType] = menuModule.ingredientesSeleccionados[key][ingType].filter(id => id !== ingId);
+                }
+            }
+        });
+        
+// Eventos de la flechita para mostrar/ocultar ingredientes
+        menuModule.opcionesDetalle?.addEventListener('click', (event) => {
+            const headerIngredientes = event.target.closest('.headerIngredientes');
+            if (headerIngredientes) {
+                const contenidoIngredientes = headerIngredientes.nextElementSibling;
+                const flechita = headerIngredientes.querySelector('.flechitaIngredientes');
+                
+                if (contenidoIngredientes) {
+                    if (contenidoIngredientes.classList.contains('collapsed')) {
+                        contenidoIngredientes.classList.remove('collapsed');
+                        contenidoIngredientes.classList.add('expanded');
+                        flechita.textContent = '▼';
+                    } else {
+                        contenidoIngredientes.classList.remove('expanded');
+                        contenidoIngredientes.classList.add('collapsed');
+                        flechita.textContent = '▶';
+                    }
+                }
+            }
+        });
+        
         // Eventos de las opciones del menú
         menuModule.opcionesDetalle?.addEventListener('click', (event) => {
             const botonOpcion = event.target.closest('.botonOpcion');
@@ -81,41 +128,29 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Agregar pizza a la promoción
                     agregarPizzaPromocion(botonOpcion.dataset.name, Number(botonOpcion.dataset.price));
                 } else {
-                    carritoModule.agregarAlCarrito(botonOpcion.dataset.name, Number(botonOpcion.dataset.price));
+                    // Obtener ingredientes personalizados seleccionados
+                    const itemName = botonOpcion.dataset.name;
+                    const key = `${menuModule.menuActual}-${itemName}`;
+                    const ingredientes = menuModule.ingredientesSeleccionados[key] || { agregar: [], sacar: [] };
+                    
+                    carritoModule.agregarAlCarrito(botonOpcion.dataset.name, Number(botonOpcion.dataset.price), ingredientes);
                     menuModule.cerrarDetalleMenu();
                 }
             }
         });
         
-        // Eventos del carrito (eliminar, delivery, confirmar)
+        // Eventos del carrito (eliminar, confirmar)
         contenedorItemsCarrito.addEventListener('click', (event) => {
             const botonEliminar = event.target.closest('.botonEliminar');
             if (botonEliminar) {
                 const nombre = botonEliminar.dataset.name;
-                const indice = carritoModule.carrito.findIndex(item => item.name === nombre);
-                if (indice !== -1) {
-                    carritoModule.carrito.splice(indice, 1);
-                    carritoModule.renderizarCarrito();
-                }
-            }
-            
-            const botonDelivery = event.target.closest('#delivery-gratis-btn');
-            if (botonDelivery) {
-                carritoModule.deliveryGratisActivo = !carritoModule.deliveryGratisActivo;
-                if (carritoModule.deliveryGratisActivo) {
-                    botonDelivery.textContent = 'Quitar';
-                    botonDelivery.classList.add('activo');
-                } else {
-                    botonDelivery.textContent = 'Agregar';
-                    botonDelivery.classList.remove('activo');
-                }
+                carritoModule.eliminarDelCarrito(nombre);
             }
             
             const botonConfirmar = event.target.closest('#confirm-order');
             if (botonConfirmar) {
-                // Guardar carrito y delivery gratis en localStorage
+                // Guardar carrito en localStorage
                 localStorage.setItem('carritoPedido', JSON.stringify(carritoModule.carrito));
-                localStorage.setItem('deliveryGratis', carritoModule.deliveryGratisActivo);
                 // Redirigir a la página de checkout
                 window.location.href = 'checkout.html';
             }
@@ -158,7 +193,7 @@ function abrirMenuPizzasPromocion(promocion) {
     contador.innerHTML = `<p style="color: var(--primario); margin-bottom: 10px;"><strong>Pizzas seleccionadas: <span id="contadorPizzas">0</span>/3</strong></p>`;
     lista.appendChild(contador);
     
-opciones.forEach(opcion => {
+    opciones.forEach(opcion => {
         const elemento = document.createElement('div');
         elemento.className = 'opcionMenu';
         const imagenHtml = opcion.image ? `<img src="${opcion.image}" alt="${opcion.name}" class="imagenOpcionMenu">` : '';
@@ -214,6 +249,9 @@ function agregarPizzaPromocion(nombre, precio) {
             esPromocion3Pizzas: true,
             pizzas: pizzasSeleccionadas
         });
+        
+        // Guardar en localStorage
+        localStorage.setItem('carritoPedido', JSON.stringify(carritoModule.carrito));
         
         carritoModule.renderizarCarrito();
         carritoModule.alternarCarrito(true);

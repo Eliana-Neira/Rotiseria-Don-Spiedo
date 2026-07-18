@@ -79,6 +79,36 @@
     color: var(--texto);
 }
 
+.inputConMoneda {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.simboloMoneda {
+    position: absolute;
+    left: 12px;
+    color: var(--suave);
+    font-weight: 500;
+    pointer-events: none;
+}
+
+.inputConMoneda input {
+    padding-left: 28px;
+}
+
+/* Quitar flechas de incremento en input number */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
 .campoFormulario input:focus,
 .campoFormulario select:focus {
     outline: 2px solid var(--primario);
@@ -114,6 +144,45 @@
     margin-top: 10px;
 }
 
+.seccionRetiro {
+    margin-top: 10px;
+}
+
+.opcionesRetiro {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.opcionRetiro {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 400;
+    cursor: pointer;
+    flex: 1;
+    padding: 12px;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    background: rgba(213, 178, 65, 0.05);
+    transition: all 0.2s ease;
+}
+
+.opcionRetiro:hover {
+    background: rgba(213, 178, 65, 0.1);
+}
+
+.opcionRetiro input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primario);
+}
+
+.opcionRetiro input[type="radio"]:checked + .textoRetiro {
+    color: var(--primario);
+    font-weight: 600;
+}
+
 .seccionPago {
     margin-top: 10px;
 }
@@ -130,6 +199,55 @@
     gap: 6px;
     font-weight: 400;
     cursor: pointer;
+}
+
+.infoLocal {
+    background: rgba(213, 178, 65, 0.08);
+    border: 1px solid var(--borde);
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 10px;
+}
+
+.infoLocal h4 {
+    margin: 0 0 8px;
+    color: var(--primario);
+    font-size: 1rem;
+}
+
+.direccionLocal {
+    margin: 0 0 12px;
+    color: var(--texto);
+    font-size: 0.95rem;
+}
+
+.mapaLocal {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.infoTransferencia {
+    background: rgba(76, 175, 80, 0.15);
+    border: 1px solid #4caf50;
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 10px;
+}
+
+.infoTransferencia h4 {
+    margin: 0 0 12px;
+    color: #4caf50;
+    font-size: 1rem;
+}
+
+.datosTransferencia p {
+    margin: 6px 0;
+    color: var(--texto);
+    font-size: 0.95rem;
+}
+
+.datosTransferencia strong {
+    color: var(--primario);
 }
 
 .precioTachado {
@@ -155,9 +273,15 @@
 }
 
 .promocion3pizzas {
-    border-bottom: 1px dashed var(--primario);
     margin-bottom: 5px;
     padding-bottom: 10px;
+}
+
+.ingredientesResumen {
+    font-size: 0.85rem;
+    color: var(--suave);
+    margin-top: 4px;
+    padding-left: 10px;
 }
 
 /* Responsive - Checkout en móviles */
@@ -183,6 +307,15 @@
     .campoPago {
         flex-direction: column;
         gap: 8px;
+    }
+    
+    .opcionesRetiro {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .opcionRetiro {
+        padding: 10px;
     }
     
     .resumenPedido {

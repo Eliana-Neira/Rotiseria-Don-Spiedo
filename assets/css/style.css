@@ -481,32 +481,9 @@ nav a,
     color: #1c1014;
 }
 
-.botonDelivery {
-    background: var(--primario);
-    color: #1c1014;
-    border: none;
-    border-radius: 999px;
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.botonDelivery.activo {
-    background: #4caf50;
-    color: white;
-}
-
 .totalCarrito {
     font-weight: 700;
     color: var(--primario);
-}
-
-.etiquetaDelivery {
-    font-size: 0.85rem;
-    color: #4caf50;
-    font-weight: 500;
-    margin-left: 8px;
 }
 
 .carritoVacio {
@@ -702,9 +679,91 @@ nav a,
 }
 
 .promocion3pizzas {
-    border-bottom: 1px dashed var(--primario);
     margin-bottom: 5px;
     padding-bottom: 10px;
+}
+
+.ingredientesPersonalizables {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--borde);
+}
+
+.tituloIngredientes {
+    font-size: 0.85rem;
+    color: var(--suave);
+    margin: 0 0 8px;
+}
+
+.listaIngredientes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ingredienteItem {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    color: var(--texto);
+    cursor: pointer;
+}
+
+.ingredienteItem input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primario);
+}
+
+.ingredienteItem span {
+    user-select: none;
+}
+
+.ingredientesItemCarrito {
+    font-size: 0.8rem;
+    color: var(--suave);
+    margin-top: 4px;
+    padding-left: 10px;
+}
+
+.headerIngredientes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px 0;
+}
+
+.flechitaIngredientes {
+    font-size: 0.8rem;
+    color: var(--primario);
+    transition: transform 0.2s ease;
+}
+
+.contenidoIngredientes {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.contenidoIngredientes.collapsed {
+    max-height: 0;
+}
+
+.contenidoIngredientes.expanded {
+    max-height: 500px;
+}
+
+.seccionIngredientes {
+    margin-bottom: 8px;
+}
+
+.subtituloIngredientes {
+    font-size: 0.8rem;
+    color: var(--suave);
+    margin: 0 0 6px;
+    font-weight: 500;
 }
 
 footer {
