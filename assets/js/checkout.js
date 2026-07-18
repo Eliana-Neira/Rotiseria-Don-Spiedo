@@ -2,11 +2,11 @@
 
 // Configuración del comercio
 const CONFIGURACION_COMERCIO = {
-    direccionLocal: 'Mi casa',
+    direccionLocal: 'Cordoba Capital (Simulacion de Direccion)',
     aliasTransferencia: 'donspiedo.mp',
     cvuTransferencia: '0000000000000000000000',
     costoDelivery: 1000,
-    coordenadasLocal: { lat: -31.342917, lng: -64.275861 }
+    coordenadasLocal: { lat: -31.4201, lng: -64.1888 }
 };
 
 function formatearMonedaCheckout(valor) {

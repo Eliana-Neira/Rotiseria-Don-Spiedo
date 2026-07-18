@@ -96,10 +96,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     menuModule.ingredientesSeleccionados[key][ingType] = menuModule.ingredientesSeleccionados[key][ingType].filter(id => id !== ingId);
                 }
+                
+                // Actualizar la clase 'seleccionado' del chip
+                const chip = checkbox.closest('.chipIngrediente');
+                if (chip) {
+                    if (checkbox.checked) {
+                        chip.classList.add('seleccionado');
+                    } else {
+                        chip.classList.remove('seleccionado');
+                    }
+                }
             }
         });
         
-// Eventos de la flechita para mostrar/ocultar ingredientes
+        // Eventos de la flechita para mostrar/ocultar ingredientes
         menuModule.opcionesDetalle?.addEventListener('click', (event) => {
             const headerIngredientes = event.target.closest('.headerIngredientes');
             if (headerIngredientes) {
@@ -116,6 +126,23 @@ document.addEventListener('DOMContentLoaded', function() {
                         contenidoIngredientes.classList.add('collapsed');
                         flechita.textContent = '▶';
                     }
+                }
+                return; // No continuar con otros eventos
+            }
+            
+            // Eventos de click en los chips (para dispositivos móviles)
+            const chip = event.target.closest('.chipIngrediente');
+            if (chip) {
+                // No procesar si se hizo click en el checkbox directamente (ya tiene su propio evento)
+                if (event.target.classList.contains('checkboxIngrediente')) return;
+                
+                const checkbox = chip.querySelector('.checkboxIngrediente');
+                if (checkbox) {
+                    event.preventDefault();
+                    checkbox.checked = !checkbox.checked;
+                    // Disparar el evento change manualmente
+                    const changeEvent = new Event('change', { bubbles: true });
+                    checkbox.dispatchEvent(changeEvent);
                 }
             }
         });

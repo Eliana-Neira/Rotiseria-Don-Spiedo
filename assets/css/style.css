@@ -684,8 +684,8 @@ nav a,
 }
 
 .ingredientesPersonalizables {
-    margin-top: 10px;
-    padding-top: 10px;
+    margin-top: 12px;
+    padding-top: 12px;
     border-top: 1px solid var(--borde);
 }
 
@@ -693,6 +693,20 @@ nav a,
     font-size: 0.85rem;
     color: var(--suave);
     margin: 0 0 8px;
+    font-weight: 500;
+}
+
+.seccionIngredientes {
+    margin-bottom: 12px;
+}
+
+.subtituloIngredientes {
+    font-size: 0.75rem;
+    color: var(--suave);
+    margin: 0 0 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .listaIngredientes {
@@ -701,23 +715,88 @@ nav a,
     gap: 8px;
 }
 
-.ingredienteItem {
-    display: flex;
+.chipIngrediente {
+    display: inline-flex;
     align-items: center;
     gap: 4px;
-    font-size: 0.85rem;
-    color: var(--texto);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
     cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
 }
 
-.ingredienteItem input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    accent-color: var(--primario);
+.chipIngrediente.agregar {
+    background: rgba(76, 175, 80, 0.12);
+    color: #4caf50;
 }
 
-.ingredienteItem span {
-    user-select: none;
+.chipIngrediente.agregar.seleccionado {
+    background: #4caf50;
+    color: white;
+    border-color: #4caf50;
+}
+
+.chipIngrediente.sacar {
+    background: rgba(244, 67, 54, 0.12);
+    color: #f44336;
+}
+
+.chipIngrediente.sacar.seleccionado {
+    background: #f44336;
+    color: white;
+    border-color: #f44336;
+}
+
+.chipIngrediente input[type="checkbox"] {
+    display: none;
+}
+
+.chipIngrediente .iconoCheck {
+    display: none;
+    font-size: 0.9rem;
+}
+
+.chipIngrediente.seleccionado .iconoCheck {
+    display: inline;
+}
+
+.precioIngrediente {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+.footerOpcionMenu {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--borde);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.precioTotalOpcion {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primario);
+}
+
+.botonOpcion {
+    border: none;
+    background: var(--primario);
+    color: #031403;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s ease;
+}
+
+.botonOpcion:hover {
+    background: var(--primarioOscuro);
 }
 
 .ingredientesItemCarrito {
@@ -876,6 +955,45 @@ footer {
     /* Ocultar logo en móviles muy pequeños */
     .logoMarca {
         display: none;
+    }
+}
+
+/* Estilos responsive para chips de personalización */
+@media (max-width: 480px) {
+    .chipIngrediente {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+    }
+    
+    .chipIngrediente .iconoCheck {
+        font-size: 0.8rem;
+    }
+    
+    .precioIngrediente {
+        font-size: 0.65rem;
+    }
+    
+    .seccionIngredientes {
+        margin-bottom: 8px;
+    }
+    
+    .subtituloIngredientes {
+        font-size: 0.7rem;
+        margin: 0 0 6px;
+    }
+    
+    .listaIngredientes {
+        gap: 6px;
+    }
+    
+    .accionesOpcionMenu {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .botonOpcion {
+        width: 100%;
+        text-align: center;
     }
 }
 

@@ -167,7 +167,7 @@ function abrirDetalleMenu(nombreMenu) {
     document.body.style.overflow = 'hidden';
 }
 
-// Generar HTML para los ingredientes personalizables con flechita
+// Generar HTML para los ingredientes personalizables con chips
 function obtenerIngredientesHtml(categoria, nombreItem) {
     const ingredientes = ingredientesPersonalizables[categoria];
     if (!ingredientes) return '';
@@ -181,34 +181,45 @@ function obtenerIngredientesHtml(categoria, nombreItem) {
     return `
         <div class="ingredientesPersonalizables" data-item="${nombreItem}">
             <div class="headerIngredientes" data-item="${nombreItem}">
-                <p class="tituloIngredientes">Personaliza tu ${tipoComida}:</p>
+                <p class="tituloIngredientes">Personaliza tu ${tipoComida}</p>
                 <span class="flechitaIngredientes">▶</span>
             </div>
             <div class="contenidoIngredientes collapsed">
                 ${ingredientes.agregar && ingredientes.agregar.length > 0 ? `
                     <div class="seccionIngredientes">
-                        <p class="subtituloIngredientes">Agregar:</p>
+                        <p class="subtituloIngredientes">Agregar</p>
                         <div class="listaIngredientes">
                             ${ingredientes.agregar.map(ing => `
-                                <label class="ingredienteItem">
+                                <label class="chipIngrediente agregar ${seleccionados.agregar && seleccionados.agregar.includes(ing.id) ? 'seleccionado' : ''}" 
+                                       data-item="${nombreItem}" 
+                                       data-ing="${ing.id}" 
+                                       data-type="agregar"
+                                       data-price="${ing.price}">
                                     <input type="checkbox" class="checkboxIngrediente" 
                                            data-item="${nombreItem}" 
                                            data-ing="${ing.id}" 
                                            data-type="agregar"
                                            data-price="${ing.price}"
                                            ${seleccionados.agregar && seleccionados.agregar.includes(ing.id) ? 'checked' : ''}>
-                                    <span>${ing.name} (+$${ing.price})</span>
+                                    <span>${ing.name}</span>
+                                    <span class="precioIngrediente">+$${ing.price}</span>
+                                    <span class="iconoCheck">✓</span>
                                 </label>
                             `).join('')}
                         </div>
                     </div>
                 ` : ''}
+                
                 ${ingredientes.sacar && ingredientes.sacar.length > 0 ? `
                     <div class="seccionIngredientes">
-                        <p class="subtituloIngredientes">Sacar:</p>
+                        <p class="subtituloIngredientes">Sacar</p>
                         <div class="listaIngredientes">
                             ${ingredientes.sacar.map(ing => `
-                                <label class="ingredienteItem">
+                                <label class="chipIngrediente sacar ${seleccionados.sacar && seleccionados.sacar.includes(ing.id) ? 'seleccionado' : ''}" 
+                                       data-item="${nombreItem}" 
+                                       data-ing="${ing.id}" 
+                                       data-type="sacar"
+                                       data-price="${ing.price}">
                                     <input type="checkbox" class="checkboxIngrediente" 
                                            data-item="${nombreItem}" 
                                            data-ing="${ing.id}" 
@@ -216,6 +227,7 @@ function obtenerIngredientesHtml(categoria, nombreItem) {
                                            data-price="${ing.price}"
                                            ${seleccionados.sacar && seleccionados.sacar.includes(ing.id) ? 'checked' : ''}>
                                     <span>${ing.name}</span>
+                                    <span class="iconoCheck">✕</span>
                                 </label>
                             `).join('')}
                         </div>
